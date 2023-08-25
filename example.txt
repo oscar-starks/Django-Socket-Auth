@@ -1,0 +1,2 @@
+this is the url you use when connecting to the web socket:
+'ws://localhost:8000/ws/notification/?token=<access token>'
