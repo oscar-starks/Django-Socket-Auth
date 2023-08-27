@@ -6,7 +6,7 @@ async def serialize_json(self, text_data):
         it ensures that the data coming in has the "data" property
     '''
     try:
-        message_data = eval(text_data)
+        message_data = json.loads(message_data)
         message_processed=True
     except:
         await self.send(text_data=json.dumps({
