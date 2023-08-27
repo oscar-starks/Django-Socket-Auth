@@ -2,6 +2,7 @@ import json, jwt
 from channels.auth import AuthMiddlewareStack
 from asgiref.sync import sync_to_async
 from django.conf import settings
+from accounts.socket_serializer import serialize_json
 from accounts.models import User
 
 def decodeJWTForSocket(bearer):
@@ -64,6 +65,7 @@ async def authenticate(self, callback = None):
         await self.close(code=1000)
 
 
+
 class TokenAuthMiddleware:
     '''
         this middleware populates the scope['user'] with the credentials of the authenticated user
@@ -73,13 +75,14 @@ class TokenAuthMiddleware:
         self.inner = inner
 
     async def __call__(self, scope, receive, send):
+        headers_dict = {key.decode(): value.decode() for key, value in scope["headers"]}
+
         try:
             query_string = scope['query_string']
             query_string = str(query_string)
 
-            if 'token=' in query_string:
-                token = query_string.replace('token=', '')
-                token = eval(token)
+            if 'token' in headers_dict:
+                token = headers_dict["token"]
                 user = await sync_to_async(decodeJWTForSocket)(token)
 
                 if not user:
