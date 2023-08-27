@@ -10,7 +10,7 @@ async def user_notification(receiver, data):
         }
     
     access = get_access_token({"user_id": (str(receiver.id))})
-    uri = f"ws://{HOST}/ws/notification/?token={access}"
+    uri = f"ws://{HOST}/ws/notification/"
    
-    async with websockets.connect(uri) as websocket:
+    async with websockets.connect(uri, extra_headers={"token":access}) as websocket:
         await websocket.send(json.dumps({"data":notification_data}))
