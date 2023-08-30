@@ -28,7 +28,8 @@ async def serialize_json(self, text_data):
             
             notification_data = {}
             for key in data_keys:
-                notification_data[key] = message_data[key]
+                if key != "type":
+                    notification_data[key] = message_data[key]
 
             await self.channel_layer.group_send(
                 self.room_group_name,
