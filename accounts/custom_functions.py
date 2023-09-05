@@ -2,6 +2,7 @@ from accounts.models import Jwt, User
 from django.conf import settings
 import secrets, string, jwt, datetime
 
+
 def get_random(length):
     return "".join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(length))
 
